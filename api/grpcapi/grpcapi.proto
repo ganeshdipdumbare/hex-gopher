@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option go_package = "api/grpcapi/proto";
+
+service GopherService {
+  rpc SaveGopher(SaveGopherReq) returns (SaveGopherResp);
+  rpc GetGopher(GetGopherReq) returns (GetGopherResp);
+}
+
+message SaveGopherReq {
+  string id = 1;
+  string name = 2;
+}
+
+message SaveGopherResp { string id = 1; }
+
+message GetGopherReq { string id = 1; }
+
+message GetGopherResp {
+  string id = 1;
+  string name = 2;
+}
