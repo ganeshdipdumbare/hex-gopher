@@ -1,6 +1,7 @@
 package redisdb
 
 import (
+	"errors"
 	"hex-gopher/app"
 
 	"github.com/go-redis/redis"
@@ -11,7 +12,7 @@ type RedisDB struct {
 	client *redis.Client
 }
 
-func NewRedisDB(addr string, pwd string) (*RedisDB, error) {
+func getRedisClient(addr string, pwd string) (*redis.Client, error) {
 	cl := redis.NewClient(&redis.Options{
 		Addr:     addr,
 		Password: pwd, // no password set
@@ -19,7 +20,15 @@ func NewRedisDB(addr string, pwd string) (*RedisDB, error) {
 	})
 	_, err := cl.Ping().Result()
 	if err != nil {
-		return nil, errs.Wrap(err, "failed to create client for Redis")
+		return nil, errs.Wrap(err, "failed to create client for redis")
+	}
+	return cl, nil
+}
+
+func NewRedisDB(addr string, pwd string) (*RedisDB, error) {
+	cl, err := getRedisClient(addr, pwd)
+	if err != nil {
+		return nil, errs.Wrap(err, "failed to get client for redis")
 	}
 
 	return &RedisDB{
@@ -27,6 +36,10 @@ func NewRedisDB(addr string, pwd string) (*RedisDB, error) {
 	}, nil
 }
 func (r *RedisDB) SaveGopher(g *app.Gopher) (string, error) {
+	if g == nil {
+		return "", errs.Wrap(errors.New("nil gopher passed"), "nil gopher passed")
+	}
+
 	err := r.client.Set(g.Id, g.Name, 0).Err()
 	if err != nil {
 		return "", errs.Wrap(err, "unable to save the gopher to redis")
@@ -39,6 +52,7 @@ func (r *RedisDB) GetGopher(id string) (*app.Gopher, error) {
 	if err != nil {
 		return nil, errs.Wrap(err, "unable to save the gopher to redis")
 	}
+
 	return &app.Gopher{
 		Id:   id,
 		Name: gopherName,

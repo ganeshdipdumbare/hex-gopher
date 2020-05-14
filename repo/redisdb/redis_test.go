@@ -8,6 +8,11 @@ import (
 	"github.com/go-redis/redis"
 )
 
+const (
+	redis_addr = "localhost:6379"
+	redis_db   = ""
+)
+
 func TestNewRedisDB(t *testing.T) {
 	type args struct {
 		addr string
@@ -44,6 +49,12 @@ func TestNewRedisDB(t *testing.T) {
 }
 
 func TestRedisDB_SaveGopher(t *testing.T) {
+	cl, err := getRedisClient(redis_addr, redis_db)
+	if err != nil {
+		t.Fatal("failed to get client for redis")
+	}
+	defer cl.Close()
+
 	type fields struct {
 		client *redis.Client
 	}
@@ -56,7 +67,33 @@ func TestRedisDB_SaveGopher(t *testing.T) {
 		args    args
 		want    string
 		wantErr bool
-	}{}
+	}{
+		{
+			name: "should pass if correct gopher passed",
+			fields: fields{
+				client: cl,
+			},
+			args: args{
+				g: &app.Gopher{
+					Id:   "1",
+					Name: "Gopher1",
+				},
+			},
+			want:    "1",
+			wantErr: false,
+		},
+		{
+			name: "should fail if nil gopher passed",
+			fields: fields{
+				client: cl,
+			},
+			args: args{
+				g: nil,
+			},
+			want:    "",
+			wantErr: true,
+		},
+	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			r := &RedisDB{
@@ -75,6 +112,15 @@ func TestRedisDB_SaveGopher(t *testing.T) {
 }
 
 func TestRedisDB_GetGopher(t *testing.T) {
+	cl, err := getRedisClient(redis_addr, redis_db)
+	if err != nil {
+		t.Fatal("failed to get client for redis")
+	}
+	defer cl.Close()
+
+	// add dummy record for testing
+	cl.Set("1", "gopher1", 0)
+
 	type fields struct {
 		client *redis.Client
 	}
@@ -88,7 +134,31 @@ func TestRedisDB_GetGopher(t *testing.T) {
 		want    *app.Gopher
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name: "should pass if correct gopher id passed",
+			fields: fields{
+				client: cl,
+			},
+			args: args{
+				id: "1",
+			},
+			want: &app.Gopher{
+				Id:   "1",
+				Name: "gopher1",
+			},
+			wantErr: false,
+		},
+		{
+			name: "should fail if empty gopher id passed",
+			fields: fields{
+				client: cl,
+			},
+			args: args{
+				id: "",
+			},
+			want:    nil,
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
