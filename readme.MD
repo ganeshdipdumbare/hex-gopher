@@ -1,3 +1,5 @@
+![Test](https://github.com/ganeshdipdumbare/hex-gopher/workflows/Test/badge.svg)
+
 # hex-gopher
 Simple implementation of hexagonal architecture for Go service. 
 
