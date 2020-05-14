@@ -1,5 +1,4 @@
-![Test](https://github.com/ganeshdipdumbare/hex-gopher/workflows/Test/badge.svg) ![Coverage](https://github.com/ganeshdipdumbare/hex-gopher/workflows/Coverage/badge.svg)
-
+![Test](https://github.com/ganeshdipdumbare/hex-gopher/workflows/Test/badge.svg) [![codecov](https://codecov.io/gh/ganeshdipdumbare/hex-gopher/branch/master/graph/badge.svg)](https://codecov.io/gh/ganeshdipdumbare/hex-gopher)
 # hex-gopher
 Simple implementation of hexagonal architecture for Go service. 
 
