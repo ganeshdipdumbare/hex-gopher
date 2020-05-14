@@ -9,6 +9,7 @@ Hexagonal architecture allow us to focus on business logic rather than on tools 
 -   repo is handling DB related requests only, we can plug and play another DB at anytime if it satisifies interface ```GopherDB```
 -   api is the entry point to the application, outside system can interact with the microservice using apis and it can be of any form(gRPC,REST).
 -   connector is for connectiong the microservice to other microservices(yet to be implemented).
+-   The dependency is inward as app is not dependent on any other module which allow us to keep our businees logic intact irrespective of DB,apis etc.
 
 ## Usage
 -   Clone the repo using  
