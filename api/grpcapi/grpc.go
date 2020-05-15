@@ -53,7 +53,7 @@ func (s *Server) StartServer() {
 
 func (s *Server) StopServer() {
 	s.Server.GrpcServer.GracefulStop()
-	(*s.Server.Listner).Close()
+	s.Server.Listner.Close()
 }
 
 func (s *Server) SaveGopher(ctx context.Context, req *pb.SaveGopherReq) (*pb.SaveGopherResp, error) {
