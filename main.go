@@ -3,5 +3,6 @@ package main
 import "hex-gopher/api/grpcapi"
 
 func main() {
-	grpcapi.StartServer()
+	grpcApiServer := grpcapi.NewServer()
+	grpcApiServer.StartServer()
 }

@@ -6,39 +6,54 @@ import (
 	"hex-gopher/app"
 	"hex-gopher/repo/redisdb"
 	"log"
-	"net"
 
+	"github.com/ganeshdipdumbare/grpchelper"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
 type Server struct {
-	App app.GopherApp
+	App    app.GopherApp
+	Server *grpchelper.Server
 }
 
-func newServer(a app.GopherApp) *Server {
-	return &Server{
-		App: a,
-	}
-}
-
-func StartServer() {
-	lis, err := net.Listen("tcp", ":8080")
-	if err != nil {
-		log.Fatal("failed to start tcp listener", err)
-	}
-
+func NewServer() *Server {
 	gopherdb, err := redisdb.NewRedisDB("localhost:6379", "")
 	if err != nil {
 		log.Fatal("failed to get gopher DB", err)
 	}
 	gopherApp := app.NewApp(gopherdb)
-	gopherServer := newServer(gopherApp)
+	s, err := grpchelper.NewServer(":8080", []grpc.UnaryServerInterceptor{}, []grpc.StreamServerInterceptor{}, true)
+	if err != nil {
+		log.Fatal("error occurred while seting up grpc server")
+	}
 
-	grpcServer := grpc.NewServer()
-	pb.RegisterGopherServiceServer(grpcServer, gopherServer)
-	log.Fatal(grpcServer.Serve(lis))
+	srv := &Server{
+		App:    gopherApp,
+		Server: s,
+	}
+	pb.RegisterGopherServiceServer(s.GrpcServer, srv)
+
+	return srv
+}
+
+func (s *Server) StartServer() {
+
+	go func() {
+		err := s.Server.Serve()
+		if err != nil {
+			log.Fatal("unable to start grpc server")
+		}
+	}()
+
+	s.Server.AwaitTermination()
+	log.Println("grpc server is stopped")
+}
+
+func (s *Server) StopServer() {
+	s.Server.GrpcServer.GracefulStop()
+	(*s.Server.Listner).Close()
 }
 
 func (s *Server) SaveGopher(ctx context.Context, req *pb.SaveGopherReq) (*pb.SaveGopherResp, error) {
