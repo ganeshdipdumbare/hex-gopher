@@ -3,6 +3,7 @@ package grpcapi
 import (
 	"context"
 	pb "hex-gopher/api/grpcapi/proto"
+	"hex-gopher/config/env"
 	"net"
 	"reflect"
 	"testing"
@@ -10,7 +11,7 @@ import (
 )
 
 func TestNewServer(t *testing.T) {
-	srv := NewServer()
+	srv := NewServer(&env.EnvVariables)
 	go srv.StartServer()
 	time.Sleep(2 * time.Second)
 	defer srv.StopServer()
@@ -22,7 +23,7 @@ func TestNewServer(t *testing.T) {
 }
 
 func TestServer_SaveGopher(t *testing.T) {
-	srv := NewServer()
+	srv := NewServer(&env.EnvVariables)
 	go srv.StartServer()
 	time.Sleep(2 * time.Second)
 	defer srv.StopServer()
@@ -67,7 +68,7 @@ func TestServer_SaveGopher(t *testing.T) {
 }
 
 func TestServer_GetGopher(t *testing.T) {
-	srv := NewServer()
+	srv := NewServer(&env.EnvVariables)
 	go srv.StartServer()
 	time.Sleep(2 * time.Second)
 	defer srv.StopServer()

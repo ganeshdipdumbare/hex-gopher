@@ -1,8 +1,12 @@
 package main
 
-import "hex-gopher/api/grpcapi"
+import (
+	"hex-gopher/api/grpcapi"
+	"hex-gopher/config/env"
+)
 
 func main() {
-	grpcApiServer := grpcapi.NewServer()
+	envVar := &env.EnvVariables
+	grpcApiServer := grpcapi.NewServer(envVar)
 	grpcApiServer.StartServer()
 }

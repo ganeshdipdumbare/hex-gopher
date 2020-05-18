@@ -4,6 +4,7 @@ import (
 	"context"
 	pb "hex-gopher/api/grpcapi/proto"
 	"hex-gopher/app"
+	"hex-gopher/config/env"
 	"hex-gopher/repo/redisdb"
 	"log"
 
@@ -18,13 +19,13 @@ type Server struct {
 	Server *grpchelper.Server
 }
 
-func NewServer() *Server {
-	gopherdb, err := redisdb.NewRedisDB("localhost:6379", "")
+func NewServer(envVar *env.EnvVar) *Server {
+	gopherdb, err := redisdb.NewRedisDB(envVar.RedisAddr, envVar.RedisPass)
 	if err != nil {
 		log.Fatal("failed to get gopher DB", err)
 	}
 	gopherApp := app.NewApp(gopherdb)
-	s, err := grpchelper.NewServer(":8080", []grpc.UnaryServerInterceptor{}, []grpc.StreamServerInterceptor{}, true)
+	s, err := grpchelper.NewServer(envVar.GrpcPort, []grpc.UnaryServerInterceptor{}, []grpc.StreamServerInterceptor{}, true)
 	if err != nil {
 		log.Fatal("error occurred while seting up grpc server")
 	}
