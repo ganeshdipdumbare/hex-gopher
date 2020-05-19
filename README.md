@@ -17,7 +17,10 @@ Simple implementation of hexagonal architecture for Go service.
 
 Hexagonal architecture allow us to focus on business logic rather than on tools and external connections. Core business logic is safely developed at domain level. All the other services, tools, interfaces and repositories are connected to domain layer by application layer. The dependecies can be visualized as follows-  
 
-```tools/libraries/repos  -depends on-> application layer -dependes on-> domain(business logic)```
+```tools/libraries/repos  -depends on-> application layer -dependes on-> domain(business logic)```  
+
+Sample hex architecture layout is as follows - 
+![Image of architecture](https://github.com/ganeshdipdumbare/hex-gopher/hexarchitecture.png)
 
 So dependecy is always inwards towards domain layer. Domain layer/business logic is independednt of all the other layers and can be managed easily. This allow us to change all the other layers(e.g. DB or APIs) without having any changes in core business logic
 
