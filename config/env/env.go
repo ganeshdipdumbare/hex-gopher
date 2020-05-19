@@ -6,6 +6,7 @@ type EnvVar struct {
 	RedisAddr string `json:"redis_addr"`
 	RedisPass string `json:"redis_pass"`
 	GrpcPort  string `json:"grpc_port"`
+	MongoUri  string `json:"mongo_uri"`
 }
 
 var (
@@ -13,6 +14,7 @@ var (
 		RedisAddr: "localhost:6379",
 		RedisPass: "",
 		GrpcPort:  ":8080",
+		MongoUri:  "mongodb://localhost:27017",
 	}
 )
 

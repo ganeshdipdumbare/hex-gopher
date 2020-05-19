@@ -10,6 +10,7 @@ require (
 	github.com/onsi/ginkgo v1.12.1 // indirect
 	github.com/onsi/gomega v1.10.0 // indirect
 	github.com/pkg/errors v0.8.1
+	go.mongodb.org/mongo-driver v1.3.3
 	google.golang.org/grpc v1.29.1
 	google.golang.org/protobuf v1.23.0
 )

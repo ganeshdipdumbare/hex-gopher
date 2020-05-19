@@ -25,6 +25,4 @@ Hexagonal architecture allow us to focus on business logic rather than on tools 
 
 ## Enhancements
 -   Implememtation of REST and GraphQL sever.
--   Add mongoDB.
 -   Add sample connection with other microservice.
--   Add env variables instead of hard code values.

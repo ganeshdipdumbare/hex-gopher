@@ -24,6 +24,14 @@ func NewServer(envVar *env.EnvVar) *Server {
 	if err != nil {
 		log.Fatal("failed to get gopher DB", err)
 	}
+
+	// if want to use mongodb- uncomment this and comment out redis db code above
+	// pass the mongodb to NewApp()
+	// mongodb, err := mongodb.NewMongoDB(envVar.MongoUri, "gopherdb", "gophercollection")
+	// if err != nil {
+	// 	log.Fatal("failed to get gopher DB", err)
+	// }
+
 	gopherApp := app.NewApp(gopherdb)
 	s, err := grpchelper.NewServer(envVar.GrpcPort, []grpc.UnaryServerInterceptor{}, []grpc.StreamServerInterceptor{}, true)
 	if err != nil {

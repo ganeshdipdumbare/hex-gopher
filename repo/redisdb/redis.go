@@ -35,6 +35,7 @@ func NewRedisDB(addr string, pwd string) (*RedisDB, error) {
 		client: cl,
 	}, nil
 }
+
 func (r *RedisDB) SaveGopher(g *app.Gopher) (string, error) {
 	if g == nil {
 		return "", errs.Wrap(errors.New("nil gopher passed"), "nil gopher passed")
@@ -50,7 +51,7 @@ func (r *RedisDB) SaveGopher(g *app.Gopher) (string, error) {
 func (r *RedisDB) GetGopher(id string) (*app.Gopher, error) {
 	gopherName, err := r.client.Get(id).Result()
 	if err != nil {
-		return nil, errs.Wrap(err, "unable to save the gopher to redis")
+		return nil, errs.Wrap(err, "unable to get the gopher from redis")
 	}
 
 	return &app.Gopher{
