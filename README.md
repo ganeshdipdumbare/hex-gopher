@@ -19,7 +19,9 @@ Hexagonal architecture allow us to focus on business logic rather than on tools 
 
 ```tools/libraries/repos  -depends on-> application layer -dependes on-> domain(business logic)```  
 
-Sample hex architecture layout is as follows - 
+Sample hex architecture layout is as follows -  
+
+
 ![Image of architecture](https://raw.githubusercontent.com/ganeshdipdumbare/hex-gopher/master/hexarchitecture.png)
 
 So dependecy is always inwards towards domain layer. Domain layer/business logic is independednt of all the other layers and can be managed easily. This allow us to change all the other layers(e.g. DB or APIs) without having any changes in core business logic
